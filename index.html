@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      background-color: white;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // canvas element to draw on
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // set canvas size to match window size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // number of circles to display
+    const count = 50;
+
+    // array to store circle objects
+    let circles = [];
+
+    // create circle objects
+    for (let i = 0; i < count; i++) {
+      let x = Math.random() * canvas.width;
+      let y = Math.random() * canvas.height;
+      let vx = Math.random() * 4 - 2;
+      let vy = Math.random() * 4 - 2;
+      let radius = Math.random() * 30 + 10;
+      circles.push({ x, y, vx, vy, radius });
+    }
+
+    // animate function
+    const animate = () => {
+      requestAnimationFrame(animate);
+
+      // clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // draw circles
+      for (let i = 0; i < count; i++) {
+        let c = circles[i];
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = "b8d8e6";
+        ctx.fill();
+
+        // move circles
+        c.x += c.vx;
+        c.y += c.vy;
+
+        // check for collisions with window edges
+        if (c.x + c.radius > canvas.width || c.x - c.radius < 0) {
+          c.vx = -c.vx;
+        }
+        if (c.y + c.radius > canvas.height || c.y - c.radius < 0) {
+          c.vy = -c.vy;
+        }
+      }
+    };
+    animate();
+  </script>
+</body>
+</html>
